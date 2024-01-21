@@ -1,4 +1,31 @@
-const Modal = () => {
+import { toast, Zoom } from 'react-toastify';
+
+const Modal = ({ cart, clearCart, increaseQuantity, decreaseQuantity }) => {
+    const notify = () =>
+        toast(
+            () => (
+                <div>
+                    <h6> Vui lòng xác nhận xóa giỏ hàng</h6>
+
+                    <button
+                        className='btn btn-success'
+                        onClick={() => {
+                            clearCart();
+                            toast.dismiss();
+                        }}>
+                        Xác nhận
+                    </button>
+                </div>
+            ),
+            { transition: Zoom }
+        );
+    const total = cart.reduce((total, { product, quantity }) => {
+        {
+            total += product.price * quantity;
+            return total;
+        }
+    }, 0);
+
     return (
         <div
             className='modal fade'
@@ -7,11 +34,11 @@ const Modal = () => {
             role='dialog'
             aria-labelledby='modelTitleId'
             aria-hidden='true'>
-            <div className='modal-dialog modal-lg'>
+            <div className='modal-dialog modal-xl'>
                 <div className='modal-content'>
                     <div className='modal-header'>
                         <h5 className='modal-title' id='exampleModalLabel'>
-                            My Cart
+                            My Cart ({cart.length} items)
                         </h5>
                         <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' />
                     </div>
@@ -23,29 +50,63 @@ const Modal = () => {
                                     <th>Tên sản phẩm</th>
                                     <th>Hình ảnh</th>
                                     <th>Số lượng</th>
+                                    <th></th>
                                     <th>Đơn giá</th>
                                     <th>Thành tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                {cart.map(({ product, quantity }) => {
+                                    return (
+                                        <tr key={product.id}>
+                                            <td>{product.alias}</td>
+                                            <td>{product.name}</td>
+                                            <td>
+                                                <img src={product.image} alt={product.name} width={50} />
+                                            </td>
+                                            <td colSpan={2}>
+                                                <button
+                                                    className='btn btn-success'
+                                                    onClick={() => {
+                                                        increaseQuantity(product);
+                                                    }}>
+                                                    +
+                                                </button>
+                                                {quantity}
+                                                <button
+                                                    className='btn btn-success'
+                                                    onClick={() => {
+                                                        decreaseQuantity(product);
+                                                    }}>
+                                                    -
+                                                </button>
+                                            </td>
+                                            <td>{product.price}</td>
+                                            <td>{product.price * quantity} </td>
+                                        </tr>
+                                    );
+                                })}
                                 <tr>
-                                    <td>@</td>
-                                    <td>@</td>
-                                    <td>@</td>
-                                    <td>2222</td>
-                                    <td>222</td>
-                                    <td>222</td>
+                                    <td colSpan={6} style={{ textAlign: 'right' }}>
+                                        Tổng tiền:
+                                    </td>
+                                    <td>{total}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div className='modal-footer'>
+                        <button
+                            type='button'
+                            className='btn btn-secondary'
+                            onClick={() => {
+                                notify();
+                            }}>
+                            Xóa giỏ hàng
+                        </button>
                         <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>
                             Close
                         </button>
-                        {/* <button type='button' className='btn btn-primary'>
-                            Save changes
-                        </button> */}
                     </div>
                 </div>
             </div>

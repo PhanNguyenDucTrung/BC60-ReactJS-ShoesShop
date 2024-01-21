@@ -1,14 +1,11 @@
 import ProductItem from './ProductItem.jsx';
 
 const ProductList = props => {
-    const { productsData: products, addToCart } = props;
-    console.log(props);
-    // console.log(productsData);
-    console.log(products);
+    const { productsData: products, addToCart, showDetail } = props;
     return (
-        <div className='row'>
+        <div className='row gy-4'>
             {products.map(product => {
-                return <ProductItem key={product.id} {...{ product }} {...{ addToCart }} />;
+                return <ProductItem key={product.id} {...{ product }} {...{ addToCart }} {...{ showDetail }} />;
             })}
         </div>
     );
