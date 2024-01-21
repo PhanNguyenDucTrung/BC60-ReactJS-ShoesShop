@@ -49,8 +49,29 @@ const ShoesStore = () => {
         if (cartItem && cartItem.quantity > 1) {
             cartItem.quantity -= 1;
             setCart([...cart]);
+        } else {
+            toast(
+                <div>
+                    <p> Bạn muốn xóa sản phẩm khỏi giỏ hàng?</p>
+                    <button
+                        className='btn btn-success'
+                        onClick={() => {
+                            deleteCartItem(product);
+                            toast.dismiss();
+                        }}>
+                        Confirm
+                    </button>
+                </div>,
+                { pauseOnHover: false }
+            );
         }
     };
+
+    const deleteCartItem = product => {
+        const updatedCart = cart.filter(cartItem => cartItem.product.id !== product.id);
+        setCart(updatedCart);
+    };
+
     return (
         <div className='container'>
             <ToastContainer />

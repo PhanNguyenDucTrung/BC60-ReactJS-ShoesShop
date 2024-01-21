@@ -66,19 +66,19 @@ const Modal = ({ cart, clearCart, increaseQuantity, decreaseQuantity }) => {
                                             </td>
                                             <td colSpan={2}>
                                                 <button
-                                                    className='btn btn-success'
+                                                    className='btn btn-success me-1'
                                                     onClick={() => {
                                                         increaseQuantity(product);
                                                     }}>
-                                                    +
+                                                    <i className='fa-solid fa-plus'></i>
                                                 </button>
                                                 {quantity}
                                                 <button
-                                                    className='btn btn-success'
+                                                    className='btn btn-success ms-1'
                                                     onClick={() => {
                                                         decreaseQuantity(product);
                                                     }}>
-                                                    -
+                                                    <i className='fa-solid fa-minus'></i>
                                                 </button>
                                             </td>
                                             <td>{product.price}</td>
@@ -102,7 +102,10 @@ const Modal = ({ cart, clearCart, increaseQuantity, decreaseQuantity }) => {
                             onClick={() => {
                                 notify();
                             }}>
-                            Xóa giỏ hàng
+                            Xóa giỏ hàng <i className='fa fa-trash'></i>
+                        </button>
+                        <button className='btn btn-success'>
+                            Thanh toán <i className='fa fa-shopping-cart'></i>
                         </button>
                         <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>
                             Close
