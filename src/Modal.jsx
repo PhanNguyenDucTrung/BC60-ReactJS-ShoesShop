@@ -1,4 +1,5 @@
 import { toast, Zoom } from 'react-toastify';
+import { useEffect, useState } from 'react';
 
 const Modal = ({ cart, clearCart, increaseQuantity, decreaseQuantity }) => {
     const notify = () =>
@@ -25,6 +26,16 @@ const Modal = ({ cart, clearCart, increaseQuantity, decreaseQuantity }) => {
             return total;
         }
     }, 0);
+
+    const [intervalId, setIntervalId] = useState(null);
+
+    useEffect(() => {
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
+    }, [intervalId]);
 
     return (
         <div
@@ -69,14 +80,52 @@ const Modal = ({ cart, clearCart, increaseQuantity, decreaseQuantity }) => {
                                                     className='btn btn-success me-1'
                                                     onClick={() => {
                                                         increaseQuantity(product);
+                                                    }}
+                                                    onMouseDown={() => {
+                                                        setIntervalId(
+                                                            setInterval(() => {
+                                                                increaseQuantity(product);
+                                                            }, 300)
+                                                        );
+                                                    }}
+                                                    onMouseUp={() => {
+                                                        clearInterval(intervalId);
+                                                        setIntervalId(null);
+                                                    }}
+                                                    onMouseLeave={() => {
+                                                        clearInterval(intervalId);
+                                                        setIntervalId(null);
                                                     }}>
                                                     <i className='fa-solid fa-plus'></i>
                                                 </button>
-                                                {quantity}
+                                                <span
+                                                    style={{
+                                                        display: 'inline-block',
+                                                        width: '20px',
+                                                        textAlign: 'center',
+                                                    }}>
+                                                    {quantity}
+                                                </span>
+
                                                 <button
                                                     className='btn btn-success ms-1'
                                                     onClick={() => {
                                                         decreaseQuantity(product);
+                                                    }}
+                                                    onMouseDown={() => {
+                                                        setIntervalId(
+                                                            setInterval(() => {
+                                                                decreaseQuantity(product);
+                                                            }, 300)
+                                                        );
+                                                    }}
+                                                    onMouseUp={() => {
+                                                        clearInterval(intervalId);
+                                                        setIntervalId(null);
+                                                    }}
+                                                    onMouseLeave={() => {
+                                                        clearInterval(intervalId);
+                                                        setIntervalId(null);
                                                     }}>
                                                     <i className='fa-solid fa-minus'></i>
                                                 </button>
@@ -90,7 +139,11 @@ const Modal = ({ cart, clearCart, increaseQuantity, decreaseQuantity }) => {
                                     <td colSpan={6} style={{ textAlign: 'right' }}>
                                         Tổng tiền:
                                     </td>
-                                    <td>{total}</td>
+                                    <td>
+                                        {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
+                                            total
+                                        )}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
